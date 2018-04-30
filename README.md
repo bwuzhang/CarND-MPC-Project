@@ -106,3 +106,36 @@ still be compilable with cmake and make./
 
 ## How to write a README
 A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+
+## Rubic Points
+### The model
+I used the Kinematic model which has 6 states and 2 actuator inputs.
+
+The model equations are as follow:
+```
+x[t] = x[t-1] + v[t-1] * cos(psi[t-1]) * dt
+y[t] = y[t-1] + v[t-1] * sin(psi[t-1]) * dt
+psi[t] = psi[t-1] + v[t-1] / Lf * delta[t-1] * dt
+v[t] = v[t-1] + a[t-1] * dt
+cte[t] = f(x[t-1]) - y[t-1] + v[t-1] * sin(epsi[t-1]) * dt
+epsi[t] = psi[t] - psides[t-1] + v[t-1] * delta[t-1] / Lf * dt
+```
+
+Where:
+
+- `x, y` : Car's position.
+- `psi` : Car's heading direction.
+- `v` : Car's velocity.
+- `cte` : Cross-track error.
+- `epsi` : Orientation error.
+
+And the two actuators inputs are:
+
+- `a` : Car's acceleration (throttle).
+- `delta` : Steering angle.
+### Timestep Length and Elapsed Duration (N & dt)
+I used N=10 and dt=0.1. N equals to 10 is good enough for the controller to perform and 0.1 without running too slow. 0.1s is the system delay, so that's the minimum time interval I can choose.
+### Polynomial Fitting and MPC Preprocessing
+I preprocessed the waypoints to vehicle coordinates. I used 3rd degree polynomial to fit the converted waypoints.
+### Model Predictive Control with Latency
+The model is using the delayed state to take into account the the 100ms delay. 
